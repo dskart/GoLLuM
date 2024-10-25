@@ -61,26 +61,3 @@ jobs:
           git tag -a v${{ needs.release.outputs.major }}.${{ needs.release.outputs.minor }} -m "Release v${{ needs.release.outputs.major }}.${{ needs.release.outputs.minor }}"
           git push origin v${{ needs.release.outputs.major }}
           git push origin v${{ needs.release.outputs.major }}.${{ needs.release.outputs.minor }}
-
-  goreleaser:
-    runs-on: ubuntu-latest
-    needs: release-tags
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: stable
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: "~> v2"
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
