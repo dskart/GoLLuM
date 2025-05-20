@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/dskart/GoLLuM/compare/v1.0.0...v1.0.1) (2025-05-20)
+
+
+### Bug Fixes
+
+* fix release ([#4](https://github.com/dskart/GoLLuM/issues/4)) ([123fd3f](https://github.com/dskart/GoLLuM/commit/123fd3fc664c6f25a697096befd3129ca57adc8b))
+
 ## 1.0.0 (2025-05-20)
 
 
