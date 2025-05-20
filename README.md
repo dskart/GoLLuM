@@ -2,7 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dskart/gollum)](https://goreportcard.com/report/github.com/dskart/gollum)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# GoLLuM
+# 🧌 oLLuM
 
 GoLLuM is a powerful Go library for building LLM-powered applications and agent workflows. With a focus on simplicity and extensibility, GoLLuM enables developers to easily integrate LLM capabilities into their Go applications.
 
