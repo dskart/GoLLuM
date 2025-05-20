@@ -1,4 +1,4 @@
-# OpenAI
+# 🤖 OpenAI
 
 A clean and idiomatic Go client for the OpenAI API, providing strong typing, error handling, and configurable behavior for seamless integration with LLM-powered applications.
 

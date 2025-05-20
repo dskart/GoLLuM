@@ -1,4 +1,4 @@
-# Ringchain
+# 💍 Ringchain
 
 A powerful graph-based framework for building and executing agent workflows concurrently in Go. Ringchain makes it easy to create complex, multi-step workflows that can be run efficiently.
 
