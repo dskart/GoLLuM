@@ -32,7 +32,11 @@ func testHttpClient() *retryablehttp.Client {
 
 func newTestServer(t *testing.T, expectedReqBody openai.ChatCompletionRequestBody, resp openai.ChatCompletionObject) *httptest.Server {
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
+		defer func() {
+			if err := r.Body.Close(); err != nil {
+				t.Logf("failed to close request body: %v", err)
+			}
+		}()
 		reqData, err := io.ReadAll(r.Body)
 		require.NoError(t, err)
 		var reqBody openai.ChatCompletionRequestBody
@@ -43,7 +47,8 @@ func newTestServer(t *testing.T, expectedReqBody openai.ChatCompletionRequestBod
 
 		rawBody, err := json.Marshal(&resp)
 		require.NoError(t, err)
-		w.Write(rawBody)
+		_, err = w.Write(rawBody)
+		require.NoError(t, err)
 	}))
 	return svr
 }
@@ -71,7 +76,7 @@ func TestScrolls(t *testing.T) {
 	content := "I'm Sorry Dave, I'm Afraid I Can't Do That"
 	resp := openai.ChatCompletionObject{
 		Choices: []openai.Choice{
-			openai.Choice{
+			{
 				Message: openai.ChatCompletionMessage{
 					Role:    openai.AssistantRoleType,
 					Content: &content,

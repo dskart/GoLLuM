@@ -24,8 +24,9 @@ func run(ctx context.Context, logger *zap.Logger, openAiKey string, gptModel str
 		return fmt.Errorf("failed to initialize agent: %w", err)
 	}
 
+	question := `give me a summary of the cars sales data`
 	args := map[string]any{
-		"question": "Hello, how are you doing",
+		"question": question,
 	}
 
 	results, err := agent.Run(ctx, logger, args)
@@ -33,6 +34,7 @@ func run(ctx context.Context, logger *zap.Logger, openAiKey string, gptModel str
 		return fmt.Errorf("failed to run agent: %w", err)
 	}
 
+	fmt.Printf("User question: %s\n", question)
 	for k, v := range results {
 		fmt.Printf("%s: %v\n", k, v)
 	}

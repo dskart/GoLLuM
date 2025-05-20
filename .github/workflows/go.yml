@@ -11,7 +11,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: "1.23"
+          go-version: "1.24"
 
       - name: Build
         run: |
@@ -23,6 +23,9 @@ jobs:
           go test -v ./...
           go vet ./...
 
-      - name: Staticcheck
+      - name: Lint
         run: |
-          make bin/staticcheck && ./bin/staticcheck ./...
+          make bin
+          make lint
+          make fmt
+

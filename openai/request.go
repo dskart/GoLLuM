@@ -38,10 +38,20 @@ func request[B RequestBody, R ResponseObject](ctx context.Context, httpClient *r
 		return nil, err
 	} else if resp.StatusCode != http.StatusOK {
 		respData, _ := io.ReadAll(resp.Body)
-		defer resp.Body.Close()
+		defer func() {
+			err := resp.Body.Close()
+			if err != nil {
+				fmt.Printf("Failed to close response body: %v", err)
+			}
+		}()
 		return nil, fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(respData))
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			fmt.Printf("Failed to close response body: %v", err)
+		}
+	}()
 	respData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err

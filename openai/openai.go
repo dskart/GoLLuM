@@ -124,3 +124,7 @@ func setupHttpClient(logger interface{}) *retryablehttp.Client {
 func (o *OpenAiImpl) getChatCompletionUrl() string {
 	return o.openAiUrl.JoinPath("v1", "chat", "completions").String()
 }
+
+func StrPtr(s string) *string {
+	return &s
+}
