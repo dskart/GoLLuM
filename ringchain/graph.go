@@ -154,7 +154,9 @@ func (g *Graph) Execute(ctx context.Context, logger *zap.Logger, args map[string
 	}
 
 	workerPool := newWorkerPool(options.NumWorkers, nodeCount)
-	workerPool.Run(ctx)
+	if err := workerPool.Run(ctx); err != nil {
+		return nil, err
+	}
 
 	// add all nodes without predecessors to the worker pool
 	for nodeHash, predecessors := range predecessorMap {
@@ -168,8 +170,8 @@ func (g *Graph) Execute(ctx context.Context, logger *zap.Logger, args map[string
 		}
 	}
 
-	var nodeResults = make(map[string]map[string]any, nodeCount)
-	var nodeInputMap = make(map[string]map[string]any, nodeCount)
+	nodeResults := make(map[string]map[string]any, nodeCount)
+	nodeInputMap := make(map[string]map[string]any, nodeCount)
 
 	for workerPool.NumRunningNodes() > 0 {
 		runningNode := workerPool.PopRunningNode()

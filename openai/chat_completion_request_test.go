@@ -30,7 +30,12 @@ func testHttpClient() *retryablehttp.Client {
 
 func newTestServer(t *testing.T, expectedReqBody ChatCompletionRequestBody) *httptest.Server {
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
+		defer func() {
+			err := r.Body.Close()
+			if err != nil {
+				t.Errorf("Failed to close request body: %v", err)
+			}
+		}()
 		reqData, err := io.ReadAll(r.Body)
 		require.NoError(t, err)
 		var reqBody ChatCompletionRequestBody
@@ -42,7 +47,8 @@ func newTestServer(t *testing.T, expectedReqBody ChatCompletionRequestBody) *htt
 		resp := ChatCompletionObject{}
 		rawBody, err := json.Marshal(&resp)
 		require.NoError(t, err)
-		w.Write(rawBody)
+		_, err = w.Write(rawBody)
+		require.NoError(t, err)
 	}))
 	return svr
 }

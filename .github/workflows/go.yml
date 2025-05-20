@@ -23,6 +23,9 @@ jobs:
           go test -v ./...
           go vet ./...
 
-      - name: Staticcheck
+      - name: Lint
         run: |
-          make bin/staticcheck && ./bin/staticcheck ./...
+          make bin
+          make lint
+          make fmt
+

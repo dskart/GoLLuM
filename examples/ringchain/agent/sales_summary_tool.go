@@ -32,12 +32,22 @@ func NewSalesSummaryTool(llm openai.OpenAi) (*SalesSummaryTool, error) {
 		return nil, err
 	}
 
-	g.AddNode(salesDataRetrievalNode.Name(), salesDataRetrievalNode)
-	g.AddNode(salesDataSumNode.Name(), salesDataSumNode)
-	g.AddNode(salesTotalSummarizerNode.Name(), salesTotalSummarizerNode)
+	if err := g.AddNode(salesDataRetrievalNode.Name(), salesDataRetrievalNode); err != nil {
+		return nil, err
+	}
+	if err := g.AddNode(salesDataSumNode.Name(), salesDataSumNode); err != nil {
+		return nil, err
+	}
+	if err := g.AddNode(salesTotalSummarizerNode.Name(), salesTotalSummarizerNode); err != nil {
+		return nil, err
+	}
 
-	g.AddEdge(salesDataRetrievalNode.Name(), salesDataSumNode.Name())
-	g.AddEdge(salesDataSumNode.Name(), salesTotalSummarizerNode.Name())
+	if err := g.AddEdge(salesDataRetrievalNode.Name(), salesDataSumNode.Name()); err != nil {
+		return nil, err
+	}
+	if err := g.AddEdge(salesDataSumNode.Name(), salesTotalSummarizerNode.Name()); err != nil {
+		return nil, err
+	}
 
 	return &SalesSummaryTool{
 		graph:        g,
@@ -47,22 +57,24 @@ func NewSalesSummaryTool(llm openai.OpenAi) (*SalesSummaryTool, error) {
 
 const salesSummaryToolOpenAiFnName = "report_modification_tool"
 
-var description = "Gets a sales summary for a type of product."
-var salesSummaryOpenAiFn = openai.Function{
-	Name:        salesSummaryToolOpenAiFnName,
-	Description: &description,
-	Parameters: openai.Parameters{
-		Type: openai.ObjectParameterType,
-		Properties: map[string]openai.Property{
-			"product_type": openai.Property{
-				Type:        openai.StringPropertyType,
-				Enum:        []string{"cars", "planes"},
-				Description: "The type of product to get the sales summary for.",
+var (
+	description          = "Gets a sales summary for a type of product."
+	salesSummaryOpenAiFn = openai.Function{
+		Name:        salesSummaryToolOpenAiFnName,
+		Description: &description,
+		Parameters: openai.Parameters{
+			Type: openai.ObjectParameterType,
+			Properties: map[string]openai.Property{
+				"product_type": {
+					Type:        openai.StringPropertyType,
+					Enum:        []string{"cars", "planes"},
+					Description: "The type of product to get the sales summary for.",
+				},
 			},
+			Required: []string{"product_type"},
 		},
-		Required: []string{"product_type"},
-	},
-}
+	}
+)
 
 func (n *SalesSummaryTool) OpenAiTool() openai.Tool {
 	return openai.Tool{

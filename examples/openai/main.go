@@ -8,10 +8,6 @@ import (
 	"github.com/dskart/gollum/openai"
 )
 
-func toPtr(s string) *string {
-	return &s
-}
-
 func run(ctx context.Context, openAiKey string, gptModel string) error {
 	openaiCfg := openai.Config{
 		OpenAiKey: openAiKey,
@@ -26,16 +22,15 @@ func run(ctx context.Context, openAiKey string, gptModel string) error {
 	msgs := []openai.Message{
 		{
 			Role:    openai.SystemRoleType,
-			Content: toPtr("You are an expert at Math"),
+			Content: openai.StrPtr("You are an expert at Math"),
 		},
 		{
 			Role:    openai.UserRoleType,
-			Content: toPtr("What is 1+1"),
+			Content: openai.StrPtr("What is 1+1"),
 		},
 	}
 	opts := []func(*openai.ChatCompletionOptions){}
 	resp, err := llm.ChatCompletionCreate(ctx, msgs, opts...)
-
 	if err != nil {
 		return fmt.Errorf("failed to create chat completion: %w", err)
 	}
@@ -56,7 +51,6 @@ func run(ctx context.Context, openAiKey string, gptModel string) error {
 	fmt.Printf("Assistant: %s\n", *choice.Message.Content)
 
 	return nil
-
 }
 
 func main() {
