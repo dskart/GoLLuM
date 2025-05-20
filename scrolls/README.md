@@ -1,4 +1,4 @@
-# Scrolls
+# 📜 Scrolls
 
 A powerful templating system for managing LLM prompts and conversations in Go applications. Scrolls makes it easy to create, maintain, and execute complex conversation templates with OpenAI models.
 
